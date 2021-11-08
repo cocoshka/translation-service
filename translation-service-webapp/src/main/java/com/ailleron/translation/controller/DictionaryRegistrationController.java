@@ -1,9 +1,11 @@
 package com.ailleron.translation.controller;
 
+import com.ailleron.translation.service.TranslationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("register")
 public class DictionaryRegistrationController {
+  private TranslationService service;
+
+  @Autowired
+  public DictionaryRegistrationController(TranslationService service) {
+    this.service = service;
+  }
 
   @PostMapping("/dictionaries/{product}/{language}")
   @ApiOperation(value = "Register dictionary",
