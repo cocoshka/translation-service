@@ -9,6 +9,13 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
+
   <artifactId>translation-service-webapp</artifactId>
   <dependencies>
     <dependency>
@@ -35,6 +42,16 @@
       <groupId>com.ailleron</groupId>
       <artifactId>translation-service-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>de.flapdoodle.embed</groupId>
+      <artifactId>de.flapdoodle.embed.mongo</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -48,6 +65,24 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.1.4</version>
+        <configuration>
+          <to>
+            <image>translation-service-webapp</image>
+          </to>
+          <extraDirectories>
+            <paths>
+              <path>
+                <from>dictionaries/custom</from>
+                <into>/dictionaries/custom</into>
+              </path>
+            </paths>
+          </extraDirectories>
+        </configuration>
       </plugin>
     </plugins>
   </build>
