@@ -70,7 +70,7 @@ public class DictionaryRegistrationController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
     Map<String, Object> urlParams = new HashMap<>();
-    urlParams.put("product", "example");
+    urlParams.put("product", "a");
     resourceFiles.getLanguage().ifPresent(value -> urlParams.put("language", value));
     MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
     body.add("file", resourceFiles.getResource());
