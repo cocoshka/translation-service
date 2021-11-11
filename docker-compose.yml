@@ -11,29 +11,43 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: javaboss
       MONGO_INITDB_DATABASE: javaboss
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: javaboss
-      ME_CONFIG_MONGODB_ADMINPASSWORD: javaboss
-      ME_CONFIG_MONGODB_URL: mongodb://javaboss:javaboss@mongo:27017/
-
   translation1:
-    image: translation-service-webapp:1.0.0-SNAPSHOT
+    image: translation-service-webapp:latest
     depends_on:
       - mongo
     ports:
       - "8080:8080"
 
   translation2:
-    image: translation-service-webapp:1.0.0-SNAPSHOT
+    image: translation-service-webapp:latest
     depends_on:
       - mongo
     ports:
       - "8090:8080"
+
+# Mongo Express for testing purposes
+
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    depends_on:
+#      - mongo
+#    ports:
+#      - "8079:8081"
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: javaboss
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: javaboss
+#      ME_CONFIG_MONGODB_URL: mongodb://javaboss:javaboss@mongo:27017/
+
+#  Example translation client for testing purposes
+
+#  example:
+#    image: translation-client-example:latest
+#    depends_on:
+#      - translation1
+#    ports:
+#      - "8081:8081"
+
 
 volumes:
   mongo-data:
