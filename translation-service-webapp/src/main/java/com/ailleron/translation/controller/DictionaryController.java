@@ -2,8 +2,7 @@ package com.ailleron.translation.controller;
 
 import com.ailleron.translation.api.dto.DictionariesDTO;
 import com.ailleron.translation.api.dto.DictionaryVersionsDTO;
-import com.ailleron.translation.entity.Translation;
-import com.ailleron.translation.service.TranslationService;
+import com.ailleron.translation.service.DictionaryService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -18,19 +17,11 @@ import java.util.List;
 @RestController
 @RequestMapping("dictionaries")
 public class DictionaryController {
-  private TranslationService service;
+  private final DictionaryService service;
 
   @Autowired
-  public DictionaryController(TranslationService service) {
+  public DictionaryController(DictionaryService service) {
     this.service = service;
-    Translation t = new Translation();
-    t.setLanguage("pl");
-    t.setProduct("test");
-    t.getValues().put("test", "test3");
-    t.getValues().put("test2", "test2");
-    t.getValues().put("test3", "abcd");
-    t.getValues().put("test4", "5");
-    service.save(t);
   }
 
   @GetMapping
@@ -42,33 +33,33 @@ public class DictionaryController {
   public ResponseEntity<DictionariesDTO> getDictionaries(@RequestParam(value = "product", required = false) List<String> product,
                                                          @RequestParam(value = "language", required = false) List<String> language) {
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(service.getDictionaries(language, product));
   }
 
   @GetMapping("/versions")
   @ApiOperation(value = "Get dictionary versions",
-    produces = "application/json", response = DictionariesDTO.class)
+    produces = "application/json", response = DictionaryVersionsDTO.class)
   @ApiResponses(value = {
     @ApiResponse(code = 200, message = "Dictionary instances")
   })
-  public ResponseEntity<DictionaryVersionsDTO> getDictionarieVerions(
+  public ResponseEntity<DictionaryVersionsDTO> getDictionaryVersions(
     @RequestParam(value = "product", required = false) List<String> product,
     @RequestParam(value = "language", required = false) List<String> language) {
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(service.getVersions(language, product));
   }
 
   @GetMapping("{product}/label")
-  @ApiOperation(value = "Get dictionary versions",
-    produces = "application/json", response = DictionariesDTO.class)
+  @ApiOperation(value = "Get dictionary labels",
+    produces = "application/json", response = DictionaryVersionsDTO.class)
   @ApiResponses(value = {
     @ApiResponse(code = 200, message = "Dictionary instances")
   })
-  public ResponseEntity<DictionaryVersionsDTO> getDictionarieVerions(@PathVariable(value = "product") String product,
-                                                                     @RequestParam(value = "label", required = false) List<String> label,
-                                                                     @RequestParam(value = "language", required = false) List<String> language) {
+  public ResponseEntity<DictionaryVersionsDTO> getDictionaryLabels(@PathVariable(value = "product") String product,
+                                                             @RequestParam(value = "label", required = false) List<String> label,
+                                                             @RequestParam(value = "language", required = false) List<String> language) {
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(service.getLabels(product, language, label));
   }
 
 }

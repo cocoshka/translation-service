@@ -1,6 +1,6 @@
 package com.ailleron.translation.controller;
 
-import com.ailleron.translation.service.TranslationService;
+import com.ailleron.translation.service.DictionaryService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -14,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("register")
 public class DictionaryRegistrationController {
-  private TranslationService service;
+  private final DictionaryService service;
 
   @Autowired
-  public DictionaryRegistrationController(TranslationService service) {
+  public DictionaryRegistrationController(DictionaryService service) {
     this.service = service;
   }
 
@@ -28,9 +28,10 @@ public class DictionaryRegistrationController {
     @ApiResponse(code = 200, message = "Successful dictionary registered")
   })
   public void registerDictionary(@RequestPart("file") MultipartFile file,
-                                 @PathVariable("product") String product,
-                                 @PathVariable("language") String language) {
+                                           @PathVariable("product") String product,
+                                           @PathVariable("language") String language) {
 
     log.info("Register dictionary {} in language: {}, for product: {}", file.getOriginalFilename(), language, product);
+    service.save(language, product, file);
   }
 }
