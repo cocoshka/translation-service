@@ -134,7 +134,7 @@ class DictionaryServiceTest {
         prepareDatabase();
     }
 
-    void prepareDatabaseGermanWithOverrides() {
+    void prepareDatabaseWithOverridesAndAdditionalLanguage() {
         Dictionary a_de_c = Dictionary.builder()
                 .language("de")
                 .product("a")
@@ -572,10 +572,10 @@ class DictionaryServiceTest {
         assertEquals(expectedJson, resultJson);
     }
 
-    @DisplayName("Get dictionaries for non existing DE language with overrides")
+    @DisplayName("Get dictionaries for DE language with overrides")
     @Test
-    void getDictionaries_GermanWithOverrides() {
-        prepareDatabaseGermanWithOverrides();
+    void getDictionaries_WithOverridesAndAdditionalLanguage() {
+        prepareDatabaseWithOverridesAndAdditionalLanguage();
         DictionariesDTO expected = DictionariesDTO.builder()
                 .dictionaries(new HashMap<>(){{
                     put("a", TranslationsDTO.builder()
@@ -627,10 +627,10 @@ class DictionaryServiceTest {
         assertEquals(expectedJson, resultJson);
     }
 
-    @DisplayName("Get dictionaries for non existing DE language with overrides")
+    @DisplayName("Get 'label1' and 'label2' labels for DE language with overrides")
     @Test
-    void getLabels_GermanLabelsLabel1AndLabel2WithOverrides() {
-        prepareDatabaseGermanWithOverrides();
+    void getLabels_LabelsLabel1AndLabel2WithOverridesAndAdditionalLanguage() {
+        prepareDatabaseWithOverridesAndAdditionalLanguage();
         DictionaryVersionsDTO expected = DictionaryVersionsDTO.builder()
                 .dictionaries(new HashMap<>(){{
                     put("DE", VersionDTO.builder()
