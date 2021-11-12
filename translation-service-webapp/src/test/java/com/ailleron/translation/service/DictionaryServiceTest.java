@@ -17,8 +17,9 @@ import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 import org.junit.jupiter.api.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.util.SocketUtils;
-
+import org.springframework.mock.web.MockMultipartFile;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -645,6 +646,46 @@ class DictionaryServiceTest {
         DictionaryVersionsDTO result = service.getLabels("a",
                 List.of("de"),
                 Arrays.asList("label1", "label2"));
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode expectedJson = mapper.convertValue(expected, JsonNode.class);
+        JsonNode resultJson = mapper.convertValue(result, JsonNode.class);
+
+        assertEquals(expectedJson, resultJson);
+    }
+
+    @DisplayName("Save multipart file dictionary for EN language")
+    @Test
+    void save_WithIgnoreCase() {
+        String propertiesContent = String.join("\n",
+                "label1=a",
+                "LaBel2=b",
+                "LaBel3=c");
+
+        MockMultipartFile mpf = new MockMultipartFile("file", "a_en.properties",
+                MediaType.TEXT_PLAIN_VALUE, propertiesContent.getBytes());
+
+        service.save("eN", "aB", mpf);
+
+        DictionariesDTO expected = DictionariesDTO.builder()
+                .dictionaries(new HashMap<>(){{
+                    put("ab", TranslationsDTO.builder()
+                            .values(new HashMap<>(){{
+                                // Here should be language DE
+                                put("EN", DictionaryDTO.builder()
+                                        .values(new HashMap<>(){{
+                                            put("label1", "a");
+                                            put("label2", "b");
+                                            put("label3", "c");
+                                        }})
+                                        .version("1")
+                                        .build());
+                            }})
+                            .build());
+                }})
+                .build();
+
+        DictionariesDTO result = service.getDictionaries(List.of("En"), List.of("Ab"));
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode expectedJson = mapper.convertValue(expected, JsonNode.class);
