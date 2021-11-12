@@ -1,25 +1,27 @@
 # Translation Service Documentation
 
-This is the documentation of translation service, which handles translations from multiple microservices, providing REST API for registering new translations and also directory for adding custom translations outside of the microservice.
+Source code can be found here: [Github](https://github.com/cocoshka/translation-service)
+
+This is the documentation of translation service, which handles translations from multiple microservices, providing REST API for registering new translations and also abbility of adding custom translations outside of the microservice.
 
 ## Database
 
 Database used in this project is [MongoDB](https://www.mongodb.com/), which stores data in flexible, JSON-like format. Example document of translation dictionary:
 ```json
 {
-  _id: ObjectId('618d90072e1ff0e1908256d3'),
-  language: 'en',
-  product: 'a',
-  _class: 'com.ailleron.translation.model.Dictionary',
-  custom: {
-    label1: 'd'
-  },
-  version: 2,
-  labels: {
-    label1: 'a',
-    label2: 'b',
-    label3: 'c'
-  }
+    _id: ObjectId('618d90072e1ff0e1908256d3'),
+    language: 'en',
+    product: 'a',
+    _class: 'com.ailleron.translation.model.Dictionary',
+    custom: {
+        label1: 'd'
+    },
+    version: 2,
+    labels: {
+        label1: 'a',
+        label2: 'b',
+        label3: 'c'
+    }
 }
 ```
 That format is very easy to modify and query, even embedded objects like labels, so it can extract only specific keys from that object, for example returning only "label1" and "label2" without "label3". With comparison to SQL databases, handling such query will be more complicated, like storing JSON as string in column, writing advanced query to extract specific labels or doing it in the code.
